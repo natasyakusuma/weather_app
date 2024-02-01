@@ -1,8 +1,11 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_icons/weather_icons.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,6 +36,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   double _latitude = 0.0;
   double _longitude = 0.0;
   bool _isLoading = true;
+  LatLng _currentLatLng = LatLng(0.0, 0.0);
 
   @override
   void initState() {
@@ -61,6 +65,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           _temperature = temperature.toDouble();
           _latitude = latitude;
           _longitude = longitude;
+          _currentLatLng = LatLng(latitude, longitude);
           _isLoading = false;
         });
       } else {
@@ -79,77 +84,92 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String googleApiKey = 'AIzaSyDLcwxUggpPZo8lcbH0TB4Crq5SJjtj4ag';
+    String mapURL =
+    'https://maps.googleapis.com/maps/api/staticmap?center=$_latitude,$_longitude&zoom=12&size=400x100&key=$googleApiKey';
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Weather App'),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.blue,
-              Colors.lightBlueAccent,
-            ],
+      body: Expanded(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.blue,
+                Colors.lightBlueAccent,
+              ],
+            ),
           ),
-        ),
-        child: Center(
-          child: _isLoading
-              ? CircularProgressIndicator(
-                  color: Colors.white,
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    BoxedIcon(
-                      _getWeatherIcon(_weatherDescription),
-                      color: Colors.white,
-                      size: 70,
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      '$_temperature°C',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      '$_weatherDescription',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Location: $_location',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Latitude : $_latitude',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Longitude : $_longitude',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
+          child: Center(
+            child: _isLoading
+                ? CircularProgressIndicator(
+              color: Colors.white,
+            )
+                : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: 100,
+                  child: Image.network(
+                    mapURL,
+                    fit: BoxFit.cover,
+                  ),
                 ),
+                SizedBox(height: 20),
+                BoxedIcon(
+                  _getWeatherIcon(_weatherDescription),
+                  color: Colors.white,
+                  size: 30,
+                ),
+                SizedBox(height: 20),
+                Text(
+                  '$_temperature°C',
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  '$_weatherDescription',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Location: $_location',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Latitude : $_latitude',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Longitude : $_longitude',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
