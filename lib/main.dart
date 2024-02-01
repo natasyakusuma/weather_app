@@ -45,7 +45,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.low);
       final response = await http.get(Uri.parse(
-          'http://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&units=metric&appid=c36d00a1ade6f97e5f7d9861c3dff92c'));
+          'http://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&units=metric&appid'));
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
