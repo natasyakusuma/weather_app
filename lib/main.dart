@@ -84,92 +84,89 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String googleApiKey = 'AIzaSyDLcwxUggpPZo8lcbH0TB4Crq5SJjtj4ag';
+    String googleApiKey = '';
     String mapURL =
-    'https://maps.googleapis.com/maps/api/staticmap?center=$_latitude,$_longitude&zoom=12&size=400x100&key=$googleApiKey';
-
+        'https://maps.googleapis.com/maps/api/staticmap?center=$_latitude,$_longitude&zoom=12&size=400x100&key=$googleApiKey';
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Weather App'),
       ),
-      body: Expanded(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.blue,
-                Colors.lightBlueAccent,
-              ],
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.blue,
+              Colors.lightBlueAccent,
+            ],
           ),
-          child: Center(
-            child: _isLoading
-                ? CircularProgressIndicator(
-              color: Colors.white,
-            )
-                : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: 100,
-                  child: Image.network(
-                    mapURL,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                SizedBox(height: 20),
-                BoxedIcon(
-                  _getWeatherIcon(_weatherDescription),
+        ),
+        child: Center(
+          child: _isLoading
+              ? CircularProgressIndicator(
                   color: Colors.white,
-                  size: 30,
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 100,
+                      child: Image.network(
+                        mapURL,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    BoxedIcon(
+                      _getWeatherIcon(_weatherDescription),
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      '$_temperature°C',
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      '$_weatherDescription',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Location: $_location',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Latitude : $_latitude',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Longitude : $_longitude',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 20),
-                Text(
-                  '$_temperature°C',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  '$_weatherDescription',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Location: $_location',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Latitude : $_latitude',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Longitude : $_longitude',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );
