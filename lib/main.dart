@@ -30,6 +30,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
   String _weatherDescription = 'Loading...';
   String _location = '';
   double _temperature = 0.0;
+  double _latitude = 0.0;
+  double _longitude = 0.0;
   bool _isLoading = true;
 
   @override
@@ -43,18 +45,22 @@ class _WeatherScreenState extends State<WeatherScreen> {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.low);
       final response = await http.get(Uri.parse(
-          'http://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=c36d00a1ade6f97e5f7d9861c3dff92c'));
+          'http://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&units=metric&appid=c36d00a1ade6f97e5f7d9861c3dff92c'));
 
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         String weather = data['weather'][0]['description'];
         String location = data['name'];
         double temperature = data['main']['temp'];
+        double latitude = position.latitude;
+        double longitude = position.longitude;
 
         setState(() {
           _weatherDescription = weather;
           _location = location;
-          _temperature = temperature;
+          _temperature = temperature.toDouble();
+          _latitude = latitude;
+          _longitude = longitude;
           _isLoading = false;
         });
       } else {
@@ -121,6 +127,22 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     SizedBox(height: 10),
                     Text(
                       'Location: $_location',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Latitude : $_latitude',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Longitude : $_longitude',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,
